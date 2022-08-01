@@ -43,8 +43,8 @@ allfileslocs.append(fileslocs)
 allfileslocs.append(fileslocs1)
 allfileslocs.append(fileslocs2)
 
-for filelocs in allfileslocs:
-    fileslist = os.listdir(fileslocs)
+for cfilelocs in allfileslocs:
+    fileslist = os.listdir(cfilelocs)
 
     outputloc = "outdata"
     os.makedirs(outputloc, exist_ok=True)
@@ -52,9 +52,11 @@ for filelocs in allfileslocs:
     for fnl in fileslist:
         if not 'rtf' in fnl:
             continue
+        if fnl.startswith('.'):
+            continue
 
-        cf = os.path.join(fileslocs,fnl)
-        print(fnl)
+        cf = os.path.join(cfilelocs,fnl)
+        # print(fnl)
 
         sample_date, sample_sex, sample_age = strip_fname(fnl)
 
@@ -80,16 +82,37 @@ for filelocs in allfileslocs:
         specimen = get_pat_or_spe('spe',ct2)
         pathogen = get_pat_or_spe('pat',ct2)
 
-        print(sample_date)
-        print(sample_sex)
-        print(sample_age)
-        print(specimen)
-        print(pathogen)
+        # print(sample_date)
+        # print(sample_sex)
+        # print(sample_age)
+        # print(specimen)
+        # print(pathogen)
         #read table
 
         nontab = re.compile('Microbiology.*?Anti',re.DOTALL | re.IGNORECASE)
         ctt0 = re.sub(nontab,'Anti',ct2)
 
+        #######
+        #lil hackS
+        if ctt0.lower().find('micro') == 0: #preamble not removed
+            nontab = re.compile('Microbiology.*?Susceptibility Information:',re.DOTALL | re.IGNORECASE)
+            ctt0 = re.sub(nontab,'Antimicrobial,MIC,Interpretation,Antimicrobial,MIC,Interpretation\n',ctt0)
+
+
+        if ctt0.lower().find('mic method') == 0: #preamble not removed
+            nontab = re.compile('MIC Method.*?Antimicrobial',re.DOTALL | re.IGNORECASE)
+            ctt0 = re.sub(nontab,'Antimicrobial',ctt0)
+
+        if ctt0.lower().find('test: ') == 0: #preamble not removed
+            nontab = re.compile('Test:.*?Antibiotics',re.DOTALL | re.IGNORECASE)
+            ctt0 = re.sub(nontab,'Antibiotics',ctt0)
+
+        #random messups in machine output?
+        randmess = re.compile('InterpretRation')
+        ctt0 = re.sub(randmess,'Interpretation',ctt0)
+
+        ## hacks among hacks
+        ########
         tabend = re.compile('S = Sen.*?\\n',re.DOTALL)
         ctt1 = re.sub(tabend,'',ctt0)
 
@@ -97,7 +120,11 @@ for filelocs in allfileslocs:
         ctt2 = re.sub(tabend_more,'',ctt1)
 
         tabtocsv = re.compile('\|')
-        ctt = re.sub(tabtocsv,',',ctt2).lstrip() ##prevent first column name starting with white spaces
+        ctt3 = re.sub(tabtocsv,',',ctt2).lstrip() ##prevent first column name starting with white spaces
+
+        #clean up some MIC name
+        micmess = re.compile('MIC \(.*?\)')
+        ctt = re.sub(micmess,'MIC',ctt3).lstrip()
 
         textfile = open(os.path.join(outputloc,f'{fn}.csv'), "w")
         a = textfile.write(ctt)
@@ -106,13 +133,13 @@ for filelocs in allfileslocs:
         df = pd.read_csv(os.path.join(outputloc,f'{fn}.csv'))
         df.columns = [e.lstrip().rstrip() for e in df.columns]
 
-        import_uuid = str(uuid.uuid1())
+        import_uuid = str(uuid.uuid4())
 
         if df.columns[0]=='Antimicrobial':
             for iii, rrr in df.iterrows():
-                if 'MIC (µg/ml)' in df.columns:
-                    mic0 = rrr['MIC (µg/ml)']
-                    mic1 = rrr['MIC (µg/ml).1']
+                if 'MIC' in df.columns:
+                    mic0 = rrr['MIC']
+                    mic1 = rrr['MIC.1']
                 else:
                     mic0 = 'N/A'
                     mic1 = 'N/A'
@@ -130,6 +157,8 @@ for filelocs in allfileslocs:
                     'result':rrr['Interpretation']
                 }
                 megagigalist.append(new_df)
+                if not 'Antimicrobial.1' in df.columns:
+                    continue
                 new_df = {
                     'import_uuid':import_uuid,
                     'input_file_name':fnl,
@@ -157,6 +186,8 @@ for filelocs in allfileslocs:
                     'result':rrr['Sensitivity']
                 }
                 megagigalist.append(new_df)
+                if not 'Antibiotics.1' in df.columns:
+                    continue
                 new_df = {
                     'import_uuid':import_uuid,
                     'input_file_name':fnl,
@@ -170,7 +201,7 @@ for filelocs in allfileslocs:
                 }
                 megagigalist.append(new_df)
         else:
-            print('SHIT')
+            print('ERROR')
 
 ast_data = pd.DataFrame.from_records(megagigalist)
-ast_data.to_csv('ast_data')
+ast_data.to_csv('ast_data.csv')
