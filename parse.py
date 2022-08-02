@@ -34,19 +34,20 @@ def strip_fname(fname):
     return date, sex, age
 
 megagigalist = []
-fileslocs1 = '/Users/mix/dodon/praca/AMR/data/21-chittagong-chevron/July to September, 2021'
-fileslocs='/Users/mix/dodon/praca/AMR/data/20-chittagong-chevron/Chevron Results 20201226'
-fileslocs2 = '/Users/mix/dodon/praca/AMR/data/21-chittagong-chevron/March to June, 2021'
+fileslocs1 = 'input_data/21-chittagong-chevron/July to September, 2021'
+fileslocs='input_data/20-chittagong-chevron/Chevron Results 20201226'
+fileslocs2 = 'input_data/21-chittagong-chevron/March to June, 2021'
 
 allfileslocs = []
 allfileslocs.append(fileslocs)
 allfileslocs.append(fileslocs1)
 allfileslocs.append(fileslocs2)
 
+outputloc = "outdata"
+
 for cfilelocs in allfileslocs:
     fileslist = os.listdir(cfilelocs)
 
-    outputloc = "outdata"
     os.makedirs(outputloc, exist_ok=True)
 
     for fnl in fileslist:
@@ -204,4 +205,4 @@ for cfilelocs in allfileslocs:
             print('ERROR')
 
 ast_data = pd.DataFrame.from_records(megagigalist)
-ast_data.to_csv('ast_data.csv')
+ast_data.to_csv(f'{outputloc}/ast_data_chevron.csv')
