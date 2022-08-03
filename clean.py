@@ -26,7 +26,7 @@ ast_data['antibiotic'] = ast_data['antibiotic'].astype(str).apply(lambda x: re.s
 ast_data['antibiotic'] = ast_data['antibiotic'].apply(lambda x: x.replace(' /','/').replace('/ ','/').lstrip().rstrip().lower())
 
 las_anti = sorted(list(ast_data['antibiotic'].unique()))
-pd.Series(las).to_csv('chevantbio.csv')
+pd.Series(las_anti).to_csv('chevantbio.csv')
 
 
 #####
@@ -34,4 +34,4 @@ pd.Series(las).to_csv('chevantbio.csv')
 ####
 
 las_spec = sorted(list(ast_data['specimen'].unique()))
-pd.Series(las).to_csv('chev_specimen.csv')
+pd.Series(las_spec).to_csv('chev_specimen.csv')
