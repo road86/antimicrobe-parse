@@ -3,6 +3,7 @@ import re
 import pandas as pd
 import datetime
 import uuid
+import os
 
 def get_pat_or_spe(pat_or_spe,text):
 
@@ -34,9 +35,9 @@ def strip_fname(fname):
     return date, sex, age
 
 megagigalist = []
-fileslocs1 = 'input_data/21-chittagong-chevron/July to September, 2021'
-fileslocs='input_data/20-chittagong-chevron/Chevron Results 20201226'
-fileslocs2 = 'input_data/21-chittagong-chevron/March to June, 2021'
+fileslocs1 = '../input_data/21-chittagong-chevron/July to September, 2021'
+fileslocs='../input_data/20-chittagong-chevron/Chevron Results 20201226'
+fileslocs2 = '../input_data/21-chittagong-chevron/March to June, 2021'
 
 allfileslocs = []
 allfileslocs.append(fileslocs)
@@ -112,9 +113,14 @@ for cfilelocs in allfileslocs:
         randmess = re.compile('InterpretRation')
         ctt0 = re.sub(randmess,'Interpretation',ctt0)
 
+        #turn multi-line double antibiotic name into one line entry
+        randmess = re.compile('\s*/\s*')
+        ctt0 = re.sub(randmess,'/',ctt0)
+
+
         ## hacks among hacks
         ########
-        tabend = re.compile('S = Sen.*?\\n',re.DOTALL)
+        tabend = re.compile('S = Sen.*?$',re.DOTALL)
         ctt1 = re.sub(tabend,'',ctt0)
 
         tabend_more = re.compile('\\n\(Legend: ',re.DOTALL)
@@ -127,11 +133,11 @@ for cfilelocs in allfileslocs:
         micmess = re.compile('MIC \(.*?\)')
         ctt = re.sub(micmess,'MIC',ctt3).lstrip()
 
-        textfile = open(os.path.join(outputloc,f'{fn}.csv'), "w")
+        textfile = open(os.path.join(outputloc,f'temp-file.csv'), "w")
         a = textfile.write(ctt)
         textfile.close()
 
-        df = pd.read_csv(os.path.join(outputloc,f'{fn}.csv'))
+        df = pd.read_csv(os.path.join(outputloc,f'temp-file.csv'))
         df.columns = [e.lstrip().rstrip() for e in df.columns]
 
         import_uuid = str(uuid.uuid4())
