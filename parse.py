@@ -98,7 +98,7 @@ for cfilelocs in allfileslocs:
         #lil hackS, where I couldn't remove preamble
         if ctt0.lower().find('micro') == 0: #preamble not removed
             nontab = re.compile('Microbiology.*?Susceptibility Information:',re.DOTALL | re.IGNORECASE)
-            ctt0 = re.sub(nontab,'Antimicrobial,MIC,Interpretation,Antimicrobial,MIC,Interpretation\n',ctt0)
+            ctt0 = re.sub(nontab,'Antimicrobial|MIC|Interpretation|Antimicrobial|MIC|Interpretation|\n',ctt0)
 
 
         if ctt0.lower().find('mic method') == 0: #preamble not removed
@@ -115,17 +115,24 @@ for cfilelocs in allfileslocs:
 
         #random messups in machine output?
         randmess = re.compile('InterpretRation')
-        ctt00 = re.sub(randmess,'Interpretation',ctt0)
+        ctt0a = re.sub(randmess,'Interpretation',ctt0)
 
         #turn multi-line double antibiotic name into one line entry
-        randmess = re.compile(' */ *')
-        ctt000 = re.sub(randmess,'/',ctt00)
+        randmess = re.compile(' */\s*')
+        ctt0b = re.sub(randmess,'/',ctt0a)
 
+        # randmess = re.compile('\s*\|') ##remove any white space or new line before column separator. "real" new column *always* starts after a separator
+        # ctt0c = re.sub(randmess,'|',ctt0b)
+
+        legal_new_line = '|\n'
+        ctt0c = ctt0b.replace(legal_new_line,'LEGALNEWLINE')
+        ctt0d = ctt0c.replace('\n','/')
+        ctt0e = ctt0d.replace('LEGALNEWLINE','\n')
 
         ## hacks among hacks
         ########
         tabend = re.compile('S = Sen.*?$',re.DOTALL)
-        ctt1 = re.sub(tabend,'',ctt000)
+        ctt1 = re.sub(tabend,'',ctt0e)
 
         tabend_more = re.compile('\\n\(Legend: ',re.DOTALL)
         ctt2 = re.sub(tabend_more,'',ctt1)
@@ -141,10 +148,8 @@ for cfilelocs in allfileslocs:
         a = textfile.write(ctt)
         textfile.close()
 
-        df = pd.read_csv(os.path.join(outputloc,f'temp-file.csv'))
-        df.columns = [e.lstrip().rstrip() for e in df.columns]
-
-        import_uuid = str(uuid.uuid4())
+        df = pd.read_csv(os.path.join(outputloc,f'temp-file.csv'),index_col=False)
+        df.columns = [e.lstrip().rstrip().lstrip('/').rstrip('/') for e in df.columns]
 
         if df.columns[0]=='Antimicrobial':
             for iii, rrr in df.iterrows():
@@ -156,7 +161,6 @@ for cfilelocs in allfileslocs:
                     mic1 = 'N/A'
 
                 new_df = {
-                    'import_uuid':import_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -171,7 +175,6 @@ for cfilelocs in allfileslocs:
                 if not 'Antimicrobial.1' in df.columns:
                     continue
                 new_df = {
-                    'import_uuid':import_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -186,7 +189,6 @@ for cfilelocs in allfileslocs:
         elif 'Antibiotics' in df.columns[0]:
             for iii, rrr in df.iterrows():
                 new_df = {
-                    'import_uuid':import_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -200,7 +202,6 @@ for cfilelocs in allfileslocs:
                 if not 'Antibiotics.1' in df.columns:
                     continue
                 new_df = {
-                    'import_uuid':import_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -213,6 +214,7 @@ for cfilelocs in allfileslocs:
                 megagigalist.append(new_df)
         else:
             print('ERROR')
+            vle
 
 ast_data = pd.DataFrame.from_records(megagigalist)
 ast_data.to_csv(f'{outputloc}/ast_data_chevron.csv')
