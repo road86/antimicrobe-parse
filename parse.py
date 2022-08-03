@@ -95,7 +95,7 @@ for cfilelocs in allfileslocs:
         ctt0 = re.sub(nontab,'Anti',ct2)
 
         #######
-        #lil hackS
+        #lil hackS, where I couldn't remove preamble
         if ctt0.lower().find('micro') == 0: #preamble not removed
             nontab = re.compile('Microbiology.*?Susceptibility Information:',re.DOTALL | re.IGNORECASE)
             ctt0 = re.sub(nontab,'Antimicrobial,MIC,Interpretation,Antimicrobial,MIC,Interpretation\n',ctt0)
@@ -109,19 +109,23 @@ for cfilelocs in allfileslocs:
             nontab = re.compile('Test:.*?Antibiotics',re.DOTALL | re.IGNORECASE)
             ctt0 = re.sub(nontab,'Antibiotics',ctt0)
 
+        ##
+        ### end of lil hacks
+        #####
+
         #random messups in machine output?
         randmess = re.compile('InterpretRation')
-        ctt0 = re.sub(randmess,'Interpretation',ctt0)
+        ctt00 = re.sub(randmess,'Interpretation',ctt0)
 
         #turn multi-line double antibiotic name into one line entry
-        randmess = re.compile('\s*/\s*')
-        ctt0 = re.sub(randmess,'/',ctt0)
+        randmess = re.compile(' */ *')
+        ctt000 = re.sub(randmess,'/',ctt00)
 
 
         ## hacks among hacks
         ########
         tabend = re.compile('S = Sen.*?$',re.DOTALL)
-        ctt1 = re.sub(tabend,'',ctt0)
+        ctt1 = re.sub(tabend,'',ctt000)
 
         tabend_more = re.compile('\\n\(Legend: ',re.DOTALL)
         ctt2 = re.sub(tabend_more,'',ctt1)
