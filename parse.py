@@ -150,6 +150,8 @@ for cfilelocs in allfileslocs:
 
         df = pd.read_csv(os.path.join(outputloc,f'temp-file.csv'),index_col=False)
         df.columns = [e.lstrip().rstrip().lstrip('/').rstrip('/') for e in df.columns]
+        df.to_csv(os.path.join(outputloc,f'temp-file.csv'),index=False)
+        df = pd.read_csv(os.path.join(outputloc,f'temp-file.csv'),index_col=False)
 
         if df.columns[0]=='Antimicrobial':
             for iii, rrr in df.iterrows():
