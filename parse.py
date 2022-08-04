@@ -129,12 +129,16 @@ for cfilelocs in allfileslocs:
         ctt0d = ctt0c.replace('\n','/')
         ctt0e = ctt0d.replace('LEGALNEWLINE','\n')
 
+        #remove multi `/` in place of multilines
+        randmess = re.compile('/+')
+        ctt0f = re.sub(randmess,'/',ctt0e)
+
         ## hacks among hacks
         ########
         tabend = re.compile('S = Sen.*?$',re.DOTALL)
         ctt1 = re.sub(tabend,'',ctt0e)
 
-        tabend_more = re.compile('\\n\(Legend: ',re.DOTALL)
+        tabend_more = re.compile('\(Legend: ',re.DOTALL)
         ctt2 = re.sub(tabend_more,'',ctt1)
 
         tabtocsv = re.compile('\|')

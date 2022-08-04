@@ -23,7 +23,7 @@ pd.Series(las).to_csv('chevpat.csv')
 
 ast_data['antibiotic'] = ast_data['antibiotic'].astype(str).apply(lambda x: re.sub(" +", " ", x)) # remove multiple spaces
 
-ast_data['antibiotic'] = ast_data['antibiotic'].apply(lambda x: x.replace(' /','/').replace('/ ','/').lstrip().rstrip().lower())
+ast_data['antibiotic'] = ast_data['antibiotic'].apply(lambda x: x.replace(' /','/').replace('/ ','/').lstrip().rstrip().lower().lstrip('/').rstrip('/'))
 
 las_anti = sorted(list(ast_data['antibiotic'].unique()))
 pd.Series(las_anti).to_csv('chevantbio.csv')
