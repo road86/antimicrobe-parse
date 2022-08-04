@@ -14,7 +14,7 @@ ast_data['pathogen'] = ast_data['pathogen'].astype(str).apply(lambda x: re.sub("
 
 #order alphabe
 las_pat = sorted(list(ast_data['pathogen'].unique()))
-pd.Series(las).to_csv('chevpat.csv')
+pd.Series(las_pat).to_csv('chevpat.csv')
 
 #####
 ## Antibiotics
