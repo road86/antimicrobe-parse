@@ -35,3 +35,5 @@ pd.Series(las_anti).to_csv('chevantbio.csv')
 
 las_spec = sorted(list(ast_data['specimen'].unique()))
 pd.Series(las_spec).to_csv('chev_specimen.csv')
+
+ast_data.to_csv('outdata/ast_data_chevron_clean.csv')
