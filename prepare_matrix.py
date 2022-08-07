@@ -59,16 +59,19 @@ with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
         worksheet = writer.sheets[specimen_type]
 
         worksheet.row_dimensions[1].height = 150
+
+        worksheet.column_dimensions[worksheet.cell(row=3,column=1).column_letter].width = 40
         for ccc in range(2,len(full_amb.columns)+1):
             if ccc%2:
                 worksheet.column_dimensions[worksheet.cell(row=3,column=ccc).column_letter].width = 5
             else:
-                worksheet.column_dimensions[worksheet.cell(row=3,column=ccc).column_letter].width = 2
+                worksheet.column_dimensions[worksheet.cell(row=3,column=ccc).column_letter].width = 5
             worksheet.cell(row=1,column=ccc).alignment = Alignment(textRotation=70)
             for rrr in range(heading_size+1,heading_size+1+len(full_amb)):
                 worksheet.cell(row=rrr,column=ccc).alignment = Alignment(vertical='center')
                 worksheet.cell(row=rrr,column=ccc).alignment = Alignment(horizontal='center')
 
+        worksheet.column_dimensions[worksheet.cell(row=3,column=len(full_amb.columns)+1).column_letter].width = 40
 
         for rrr in range(heading_size+1,heading_size+1+len(full_amb)):
             for ccc in range(3,len(full_amb.columns)+1,2):
@@ -77,5 +80,5 @@ with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
                     worksheet.cell(row=rrr,column=ccc).fill = PatternFill("solid", start_color=('ededed'))
                 else:
                     value = int(value_str.rstrip('%'))
-                    worksheet.cell(row=rrr,column=ccc).fill = PatternFill("solid", start_color=('d62d20' if value < 50 else 'ffa700' if value < 75 else 'eee600' if value < 90 else 'ff2800'))
+                    worksheet.cell(row=rrr,column=ccc).fill = PatternFill("solid", start_color=('d62d20' if value < 50 else 'd7503c' if value < 75 else 'eee600' if value < 90 else 'a0e040'))
         worksheet.delete_rows(3,1)
