@@ -1,4 +1,0 @@
-files with incorrect table read
-20201114^F^5Y4M.rtf
-20210815^F^64Y.rtf
-20210927^M^54Y.rtf

@@ -3,14 +3,12 @@ from openpyxl.styles import PatternFill
 from openpyxl.styles import Alignment
 import numpy as np
 
-xl = pd.ExcelFile('s.xlsx')
-xl.sheet_names  # see all sheet names
+prepo = pd.read_csv('pre-processed.csv')
 
 with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
-    for specimen_type in xl.sheet_names:
+    for specimen_type in prepo['specimen_category'].unique():
+        df = prepo[prepo['specimen_category']==specimen_type]
         print(specimen_type)
-        df = pd.read_excel('s.xlsx',sheet_name=specimen_type)
-        df.columns = ['antibiotic','pathogen','specimen','count_s', 'count_i', 'count_r', 'total', 'sensitivity']
         #make it a matrix
         amb_matrix_perc = pd.pivot(df, index='pathogen', columns='antibiotic', values='sensitivity')
         amb_matrix_tot = pd.pivot(df, index='pathogen', columns='antibiotic', values='total')
