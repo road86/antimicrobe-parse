@@ -72,7 +72,7 @@ ast_data = ast_data[ast_data['antibiotic'].isin(antibiotic_rep.keys())]
 ast_data['antibiotic'] = ast_data['antibiotic'].replace(antibiotic_rep)
 
 
-result_rep = lookup_table['result'].set_index('spelling')['correct'].dropna().apply(lambda x: x.lower()).to_dict()
+result_rep = lookup_table['result'].set_index('spelling')['correct'].dropna().apply(lambda x: x.upper()).to_dict() ##R/S/I to avoid confusion we keep it upper letter
 missing_result = ast_data[~ast_data['result'].isin(result_rep.keys())]
 ast_data = ast_data[ast_data['result'].isin(result_rep.keys())]
 ast_data['result'] = ast_data['result'].replace(result_rep)
@@ -83,7 +83,13 @@ missing_specimen = ast_data[~ast_data['specimen'].isin(specimen_rep.keys())]
 ast_data = ast_data[ast_data['specimen'].isin(specimen_rep.keys())]
 ast_data['specimen'] = ast_data['specimen'].replace(specimen_rep)
 
+lookup_table['specimen']['correct'] = lookup_table['specimen']['correct'].apply(lambda x: x.lower())
+
 specimen_category_rep = lookup_table['specimen'].set_index('correct')['specimen_category'].dropna().apply(lambda x: x.lower()).to_dict()
+
+missing_specimen_category = ast_data[~ast_data['specimen'].isin(specimen_category_rep.keys())]
+ast_data = ast_data[ast_data['specimen'].isin(specimen_category_rep.keys())]
+
 ast_data['specimen_category'] = ast_data['specimen'].replace(specimen_category_rep)
 
 ast_data.to_csv('outdata/ast_data_chevron_clean.csv')
