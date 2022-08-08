@@ -32,3 +32,9 @@ FinalOutputTable$total = rowSums(FinalOutputTable[,c("count_s", "count_i", "coun
 FinalOutputTable$sensitivity <- FinalOutputTable$count_s/FinalOutputTable$total
 
 write.csv(FinalOutputTable,'pre-processed.csv')
+
+isolates <- chevrondata %>%
+  group_by(specimen_category, pathogen)%>%
+  summarise(n_distinct(input_file_name))
+
+write.csv(isolates,'number_of_isolates.csv')
