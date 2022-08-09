@@ -36,5 +36,5 @@ write.csv(FinalOutputTable,'pre-processed.csv')
 isolates <- chevrondata %>%
   group_by(specimen_category, pathogen)%>%
   summarise(n_distinct(input_file_name))
-
+colnames(isolates) <- c('specimen_category','pathogen','number_of_isolates')
 write.csv(isolates,'number_of_isolates.csv')

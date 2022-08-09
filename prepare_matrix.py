@@ -4,6 +4,7 @@ from openpyxl.styles import Alignment
 import numpy as np
 
 prepo = pd.read_csv('pre-processed.csv')
+noi = pd.read_csv('number_of_isolates.csv')
 
 with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
     for specimen_type in prepo['specimen_category'].unique():
@@ -15,6 +16,7 @@ with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
 
         full_amb_list = []
         total_pat_entry = dict()
+        total_n_isolates = 0
 
         for pat in amb_matrix_perc.index:
             this_pat_entry = dict()
@@ -38,12 +40,17 @@ with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
                     weigh_sum = weigh_sum + no_iso
                     val_avg = val_avg + no_iso * amb_matrix_perc.loc[pat][antibio]
 
-            this_pat_entry[('total', 'weighted_avg_s')]=str(round(100 * val_avg/weigh_sum)) + '%'
+            this_pat_entry[('total', 'weigh_avg_sens')]=str(round(100 * val_avg/weigh_sum)) + '%'
+            n_of_isolates = noi[(noi['specimen_category']==specimen_type) & (noi['pathogen']==pat)]['number_of_isolates'].iloc[0]
+            this_pat_entry[('total', 'n_isolates')]=n_of_isolates
+            total_n_isolates = total_n_isolates + n_of_isolates
             full_amb_list.append(this_pat_entry)
 
         for antibio in amb_matrix_perc.loc[pat].index:
             total_pat_entry[(antibio,'s')]=str(round(100*(total_pat_entry[(antibio,'s')]/total_pat_entry[(antibio,'n')]))) + '%'
+        total_pat_entry[('total','n_isolates')]=total_n_isolates
         full_amb_list.append(total_pat_entry)
+
 
 
         full_amb_index = list(amb_matrix_perc.index)
@@ -71,7 +78,8 @@ with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
                 worksheet.cell(row=rrr,column=ccc).alignment = Alignment(vertical='center')
                 worksheet.cell(row=rrr,column=ccc).alignment = Alignment(horizontal='center')
 
-        worksheet.column_dimensions[worksheet.cell(row=3,column=len(full_amb.columns)+1).column_letter].width = 40
+        worksheet.column_dimensions[worksheet.cell(row=3,column=len(full_amb.columns)+1).column_letter].width = 20
+        worksheet.column_dimensions[worksheet.cell(row=3,column=len(full_amb.columns)).column_letter].width = 20
 
         for rrr in range(heading_size+1,heading_size+1+len(full_amb)):
             for ccc in range(3,len(full_amb.columns)+1,2):
