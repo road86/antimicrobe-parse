@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import os
 
 ast_data = pd.read_csv(os.path.join('outdata','ast_data_chevron.csv'))
 
