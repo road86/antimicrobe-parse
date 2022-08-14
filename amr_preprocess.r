@@ -1,6 +1,4 @@
 library('dplyr')
-#library('xlsx') xlsx library require java runtime which I don't like
-library(WriteXLS)
 
 rm(list = ls())
 

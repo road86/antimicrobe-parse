@@ -1,0 +1,11 @@
+name: amrenv
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - r-base=4.2.1
+  - pandas
+  - openpyxl
+  - pip
+  - pip:
+    - striprtf==0.0.20
