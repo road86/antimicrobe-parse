@@ -9,15 +9,15 @@ chevrondata <- read.csv("outdata/ast_data_chevron_clean.csv", header=TRUE)
 OutputTable <- data.frame(
   OutputTable1 <- chevrondata %>%
     group_by(specimen_category, pathogen, antibiotic) %>%
-    summarise(count_s = sum(result == 'S')),
+    summarise(count_s = sum(result == 's')),
 
   OutputTable2 <- chevrondata %>%
     group_by(specimen_category, pathogen, antibiotic) %>%
-    summarise(count_i = sum(result == 'I')),
+    summarise(count_i = sum(result == 'i')),
 
   OutputTable3 <- chevrondata %>%
     group_by(specimen_category, pathogen, antibiotic) %>%
-    summarise(count_r = sum(result == 'R'))
+    summarise(count_r = sum(result == 'r'))
 
 )
 # Cleaning the output table

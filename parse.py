@@ -45,6 +45,7 @@ allfileslocs.append(fileslocs1)
 allfileslocs.append(fileslocs2)
 
 outputloc = "outdata"
+n_files_processed = 0
 
 for cfilelocs in allfileslocs:
     fileslist = os.listdir(cfilelocs)
@@ -65,6 +66,7 @@ for cfilelocs in allfileslocs:
         with open(cf, 'r') as file:
             rtftext = file.read()
 
+        n_files_processed = n_files_processed + 1
         cleantext = rtf_to_text(rtftext, errors="ignore")
         #print(cleantext)
         #test parameters, tabs
@@ -222,5 +224,6 @@ for cfilelocs in allfileslocs:
             print('ERROR')
             vle
 
+print(f'This script processed {n_files_processed} test results')
 ast_data = pd.DataFrame.from_records(megagigalist)
 ast_data.to_csv(os.path.join(f'{outputloc}','ast_data_chevron.csv'))
