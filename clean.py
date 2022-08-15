@@ -3,7 +3,13 @@ import re
 import os
 
 #read in ast data parsed from various providers.
-ast_data = pd.read_csv(os.path.join('outdata','ast_data_chevron.csv'))
+preprocessed_files = ['ast_data_chevron.csv','ast_data_birdem.csv']
+list_of_dfs = []
+for ppf in preprocessed_files:
+    ast_data_part = pd.read_csv(os.path.join('outdata',ppf))
+    list_of_dfs.append(ast_data_part)
+
+ast_data = pd.concat(list_of_dfs)
 
 
 #clean all starting with "growth of.."
@@ -17,7 +23,7 @@ ast_data['pathogen'] = ast_data['pathogen'].astype(str).apply(lambda x: re.sub("
 
 #order alphabe
 las_pat = sorted(list(ast_data['pathogen'].unique()))
-pd.Series(las_pat).to_csv(os.path.join('outdata','chevpat.csv'))
+pd.Series(las_pat).to_csv(os.path.join('outdata','all_pat_spelling.csv'))
 
 
 #####
@@ -30,7 +36,7 @@ ast_data['antibiotic'] = ast_data['antibiotic'].astype(str).apply(lambda x: re.s
 ast_data['antibiotic'] = ast_data['antibiotic'].apply(lambda x: x.replace(' /','/').replace('/ ','/').lstrip().rstrip().lower().lstrip('/').rstrip('/').lstrip('('))
 
 las_anti = sorted(list(ast_data['antibiotic'].unique()))
-pd.Series(las_anti).to_csv(os.path.join('outdata','chevanti.csv'))
+pd.Series(las_anti).to_csv(os.path.join('outdata','all_anti_spelling.csv'))
 
 ###
 ##R S I
@@ -39,7 +45,7 @@ pd.Series(las_anti).to_csv(os.path.join('outdata','chevanti.csv'))
 ast_data['result'] = ast_data['result'].astype(str).apply(lambda x: x.lstrip().rstrip().rstrip('/').rstrip('*').lstrip('*').lower()) # remove multiple spaces
 
 las_res = sorted(list(ast_data['result'].unique()))
-pd.Series(las_res).to_csv(os.path.join('outdata','chevres.csv'))
+pd.Series(las_res).to_csv(os.path.join('outdata','all_res_spelling.csv'))
 
 
 #####
@@ -52,7 +58,7 @@ ast_data['specimen'] = ast_data['specimen'].apply(lambda x: x.replace(' /','/').
 
 
 las_spec = sorted(list(ast_data['specimen'].unique()))
-pd.Series(las_spec).to_csv(os.path.join('outdata','chev_specimen.csv'))
+pd.Series(las_spec).to_csv(os.path.join('outdata','all_specimen_spelling.csv'))
 
 # ast_data.to_csv(os.path.join('outdata','ast_data_chevron_to_clean.csv'))
 
@@ -74,6 +80,10 @@ for cfield in correction_fields[:-1]: #corrections to fields
     missing_keys_for = ast_data[~data_assigned_mask][cfield].unique()
     print(f'The following {cfield} keys are missing')
     print(missing_keys_for)
+
+    missing_spellings_to_csv = sorted(missing_keys_for)
+    pd.Series(missing_spellings_to_csv).to_csv(os.path.join('outdata',f'missing_{cfield}_spelling.csv'))
+
     ast_data = ast_data[data_assigned_mask]
     ast_data[cfield] = ast_data[cfield].replace(cfield_rep)
     print(len(ast_data))
