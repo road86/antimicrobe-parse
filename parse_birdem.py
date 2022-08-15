@@ -2,16 +2,17 @@ import re
 import pandas as pd
 import os
 
-birdem_data = os.path.join('data', 'amr_guidline_revision', 'unsorted', 'RAW AST data_ready to use', 'BIRDEM Hospital_2021.xlsx')
+birdem_data = os.path.join('..','input_data', 'unsorted', 'Raw AST data_ready to use', 'BIRDEM Hospital_2021.xlsx')
 
 df = pd.read_excel(birdem_data)
 megagigalist = []
 
+
+
 for iii, rrr in df.iterrows():
-    for abioind in range (0,72):
+    for abioind in range (0,76):
         new_df = {
             'lab_id': rrr['Lab ID'],
-            'patient_name': rrr['Patient Name'],
             'sample_sex': rrr['Gender'],
             'sample_age': rrr['Age'],
             'specimen': rrr['Sample Name'],
@@ -20,9 +21,8 @@ for iii, rrr in df.iterrows():
             'antibiotic': rrr.index[abioind],
             'sensitivity': rrr[rrr.index[abioind]]
         }
-
-        new_df[new_df.observation != 'No Growth']
-        megagigalist.append(new_df)
+        if new_df['observation'] != 'No Growth':
+             megagigalist.append(new_df)
 
 outputloc = "outdata"
 
