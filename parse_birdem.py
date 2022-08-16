@@ -8,9 +8,11 @@ df = pd.read_excel(birdem_data)
 megagigalist = []
 
 
+#for each antibiotic result there is a columns
+range_abio_columns = range(22, len(df.columns))
 
 for iii, rrr in df.iterrows():
-    for abioind in range (0,76):
+    for abioind in range_abio_columns:
         new_df = {
             'lab_id': rrr['Lab ID'],
             'sample_sex': rrr['Gender'],
@@ -27,4 +29,5 @@ for iii, rrr in df.iterrows():
 outputloc = "outdata"
 
 ast_data_birdem = pd.DataFrame.from_records(megagigalist)
+ast_data_birdem.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
 ast_data_birdem.to_csv(f'{outputloc}/ast_data_birdem.csv')
