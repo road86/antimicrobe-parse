@@ -3,7 +3,7 @@ import re
 import os
 
 #read in ast data parsed from various providers.
-preprocessed_files = ['ast_data_chevron.csv','ast_data_birdem.csv','ast_data_adhunik.csv','ast_data_square.csv']
+preprocessed_files = ['ast_data_chevron.csv','ast_data_birdem.csv','ast_data_adhumic.csv','ast_data_square.csv']
 list_of_dfs = []
 for ppf in preprocessed_files:
     ast_data_part = pd.read_csv(os.path.join('outdata',ppf))

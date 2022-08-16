@@ -226,4 +226,7 @@ for cfilelocs in allfileslocs:
 
 print(f'This script processed {n_files_processed} test results')
 ast_data = pd.DataFrame.from_records(megagigalist)
+ast_data['location']=pd.Series('chittagong',index=ast_data.index)
+ast_data['provider']=pd.Series('chevron',index=ast_data.index)
+
 ast_data.to_csv(os.path.join(f'{outputloc}','ast_data_chevron.csv'))

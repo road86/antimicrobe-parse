@@ -17,17 +17,21 @@ for iii, rrr in df.iterrows():
             'lab_id': rrr['Lab ID'],
             'sample_sex': rrr['Gender'],
             'sample_age': rrr['Age'],
+            'sample_date': rrr['MR Receiving Date'],
             'specimen': rrr['Sample Name'],
             'pathogen': rrr['Organism Name'],
-            'observation': rrr['Observation'],
             'antibiotic': rrr.index[abioind],
             'sensitivity': rrr[rrr.index[abioind]]
         }
-        if new_df['observation'] != 'No Growth':
+        if rrr['Observation'] != 'No Growth':
              megagigalist.append(new_df)
 
 outputloc = "outdata"
 
-ast_data_birdem = pd.DataFrame.from_records(megagigalist)
-ast_data_birdem = ast_data_birdem.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
-ast_data_birdem.to_csv(f'{outputloc}/ast_data_birdem.csv')
+ast_data = pd.DataFrame.from_records(megagigalist)
+ast_data = ast_data.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
+
+ast_data['location']=pd.Series('dhaka',index=ast_data.index)
+ast_data['provider']=pd.Series('birdem',index=ast_data.index)
+
+ast_data.to_csv(f'{outputloc}/ast_data_birdem.csv')
