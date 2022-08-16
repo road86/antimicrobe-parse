@@ -29,5 +29,5 @@ for iii, rrr in df.iterrows():
 outputloc = "outdata"
 
 ast_data_birdem = pd.DataFrame.from_records(megagigalist)
-ast_data_birdem.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
+ast_data_birdem = ast_data_birdem.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
 ast_data_birdem.to_csv(f'{outputloc}/ast_data_birdem.csv')

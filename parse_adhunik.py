@@ -27,7 +27,7 @@ for iii, rrr in adf.iterrows():
         if not anew_df['pathogen'] in ['No Growth', 'Mixed Growth', 'Due']:
              megagigalist.append(anew_df)
 
-ast_data_adhunik.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
+ast_data_adhunik =  ast_data_adhunik.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
 
 outputloc = "outdata"
 
