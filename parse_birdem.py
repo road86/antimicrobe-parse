@@ -2,7 +2,7 @@ import re
 import pandas as pd
 import os
 
-birdem_data = os.path.join('..','input_data', 'unsorted', 'Raw AST data_ready to use', 'BIRDEM Hospital_2021.xlsx')
+birdem_data = os.path.join('..','input_data', 'unsorted', 'AST data_ready to use', 'BIRDEM Hospital_2021.xlsx')
 
 df = pd.read_excel(birdem_data)
 megagigalist = []
