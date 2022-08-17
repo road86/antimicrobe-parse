@@ -28,7 +28,7 @@ for iii, rrr in df.iterrows():
 outputloc = "outdata"
 
 ast_data = pd.DataFrame.from_records(megagigalist)
-ast_data['sensitivity']=ast_data['sensitive_isolates']*1/ast_data['isolates_number']
+ast_data['sensitivity']=ast_data['sensitive_isolates']/ast_data['isolates_number']
 ast_data['specimen']=pd.Series('Urine',index=ast_data.index)
 ast_data['location']=pd.Series('dhaka',index=ast_data.index)
 ast_data['provider']=pd.Series('islamic bank hospital',index=ast_data.index)
