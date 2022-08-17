@@ -6,6 +6,8 @@ import numpy as np
 def mper(val):
     return str(round(100*val))+'%'
 
+thresh=0.05
+
 prepo = pd.read_csv('pre-processed.csv')
 noi = pd.read_csv('number_of_isolates.csv')
 
@@ -49,6 +51,7 @@ with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
 
         new_row[('overall sensitivity','%')] = '--'
         full_amb_list.append(new_row)
+        tots_row = new_row
 
         for (antibio, aperc), (_, atot) in zip(amb_matrix_perc.iterrows(), amb_matrix_tot.iterrows()):
             new_row = dict()
@@ -59,8 +62,12 @@ with pd.ExcelWriter("amb.xlsx", engine="openpyxl") as writer:
                     new_row[(pat,'n')] = 0
                     new_row[(pat,'%')] = '--'
                 else:
+                    #if number of isolates tested on this antibiotic i less than some percentage  of total number of isolates we will not report sensitivity
                     new_row[(pat,'n')] = atot[pat]
-                    new_row[(pat,'%')] = mper(aperc[pat])
+                    if (atot[pat] / tots_row[(pat,'n')]) < thresh:
+                        new_row[(pat,'%')] = '--'
+                    else:
+                        new_row[(pat,'%')] = mper(aperc[pat])
                     n_times_per = atot[pat] * aperc[pat]
                     oversense = oversense + n_times_per
             new_row['overall sensitivity','%'] = mper(oversense/atot.sum())
