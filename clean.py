@@ -77,11 +77,11 @@ pd.Series(las_spec).to_csv(os.path.join('outdata','all_specimen_spelling.csv'))
 
 
 correction_fields = ['pathogen','antibiotic','result','specimen','specimen_category']
-lookup_table = pd.read_excel(os.path.join('..','input_data','chevron-lookup-tables.xlsx'),sheet_name=correction_fields)
+lookup_table = pd.read_excel(os.path.join('..','input_data','lookup-tables.xlsx'),sheet_name=correction_fields)
 
 assigned_masks_total = pd.Series(True,ast_data.index)
 for cfield in correction_fields[:-1]: #corrections to fields
-    lookup_table[cfield] = lookup_table[cfield].dropna()
+    lookup_table[cfield] = lookup_table[cfield].dropna(subset=['correct'])
     lookup_table[cfield]['spelling'] = lookup_table[cfield]['spelling'].apply(lambda x: x.lower())
     cfield_rep = lookup_table[cfield].set_index('spelling')['correct'].dropna().apply(lambda x: x.lower()).to_dict()
     data_assigned_mask = ast_data[cfield].isin(cfield_rep.keys())
