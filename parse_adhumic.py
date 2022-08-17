@@ -28,11 +28,11 @@ for iii, rrr in df.iterrows():
         if not anew_df['pathogen'] in ['No Growth', 'Mixed Growth', 'Due']:
              megagigalist.append(anew_df)
 
+ast_data = pd.DataFrame.from_records(megagigalist)
 ast_data =  ast_data.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
 
 outputloc = "outdata"
 
-ast_data = pd.DataFrame.from_records(megagigalist)
 
 ast_data['location']=pd.Series('dhaka',index=ast_data.index)
 ast_data['provider']=pd.Series('adhumic',index=ast_data.index)
