@@ -1,13 +1,13 @@
 import pandas as pd
 import re
 import os
+import uuid
 
 #read in ast data parsed from various providers.
 preprocessed_files = ['ast_data_chevron.csv','ast_data_birdem.csv','ast_data_adhumic.csv','ast_data_square.csv']
 indata_dir = 'outdata'
 
-run_test = True
-if os.getenv('AMR_TEST') or run_test:
+if os.getenv('AMR_TEST') == 'test':
     preprocessed_files = ['ast_data_test.csv']
     indata_dir = 'test'
 
@@ -79,7 +79,7 @@ pd.Series(las_spec).to_csv(os.path.join('outdata','all_specimen_spelling.csv'))
 correction_fields = ['pathogen','antibiotic','result','specimen','specimen_category']
 lookup_table = pd.read_excel(os.path.join('..','input_data','chevron-lookup-tables.xlsx'),sheet_name=correction_fields)
 
-assigned_masks = dict()
+assigned_mask_total = pd.Series(True,ast_data.index)
 for cfield in correction_fields[:-1]: #corrections to fields
     lookup_table[cfield] = lookup_table[cfield].dropna()
     lookup_table[cfield]['spelling'] = lookup_table[cfield]['spelling'].apply(lambda x: x.lower())
@@ -93,13 +93,12 @@ for cfield in correction_fields[:-1]: #corrections to fields
     missing_spellings_to_csv = sorted(missing_keys_for)
     pd.Series(missing_spellings_to_csv).to_csv(os.path.join('outdata',f'missing_{cfield}_spelling.csv'))
 
-    assigned_masks[cfield]=data_assigned_mask
+    assigned_masks_total=data_assigned_mask & assigned_mask_total
     ast_data[cfield] = ast_data[cfield].replace(cfield_rep)
     print(len(ast_data))
 
 
-for cfield in correction_fields[:-1]: #corrections to fields
-    ast_data = ast_data[assigned_masks[cfield]]
+ast_data = ast_data[assigned_mask_total]
 
 las_spec_clean = sorted(list(ast_data['specimen'].unique()))
 pd.Series(las_spec_clean).to_csv(os.path.join('outdata','specimens_unique.csv'))
@@ -121,4 +120,5 @@ ast_data = ast_data[data_assigned_mask]
 
 ast_data['specimen_category'] = ast_data['specimen'].replace(specimen_category_rep)
 
+ast_data['amr_uuid'] = [uuid.uuid4() for _ in range(len(ast_data.index))]
 ast_data.to_csv(os.path.join('outdata','ast_data_clean.csv'))

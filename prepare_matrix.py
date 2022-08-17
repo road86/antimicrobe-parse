@@ -1,4 +1,5 @@
 import pandas as pd
+import uuid
 from openpyxl.styles import PatternFill
 from openpyxl.styles import Alignment
 import numpy as np

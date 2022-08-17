@@ -12,6 +12,12 @@ To finish configuration run `R` and execute
 install.packages('dplyr')
 ```
 
+# Testing
+
+To use test data, run
+```
+AMR_TEST=test python clean.py
+```
 
 # Preparing antibiogram from messy data
 
