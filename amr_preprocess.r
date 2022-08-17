@@ -3,7 +3,7 @@ library('dplyr')
 rm(list = ls())
 
 #Loading csv file
-chevrondata <- read.csv("outdata/ast_data_chevron_clean.csv", header=TRUE)
+chevrondata <- read.csv("outdata/ast_data_clean.csv", header=TRUE)
 
 # Creating a grouped data to count R, I and S
 OutputTable <- data.frame(
