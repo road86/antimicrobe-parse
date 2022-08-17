@@ -33,7 +33,6 @@ ast_data =  ast_data.dropna(subset=['sensitivity']) #remove many datapoints for 
 
 outputloc = "outdata"
 
-ast_data = pd.DataFrame.from_records(megagigalist)
 
 ast_data['location']=pd.Series('dhaka',index=ast_data.index)
 ast_data['provider']=pd.Series('adhumic',index=ast_data.index)
