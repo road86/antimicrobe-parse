@@ -1,3 +1,4 @@
+set -e
 python parse.py
 python parse_square.py
 python parse_adhumic.py
