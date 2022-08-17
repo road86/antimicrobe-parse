@@ -1,7 +1,8 @@
+
 import pandas as pd
 import os
 
-square_data = os.path.join('..','input_data','unsorted','RAW AST data_ready to use','Sq AST 2018.sav')
+square_data = os.path.join('..','input_data','unsorted','AST data_ready to use','Sq AST 2018.sav')
 df = pd.read_spss(square_data)
 
 #Instead of iterating through each row we can melt this wide format data into long format data.
