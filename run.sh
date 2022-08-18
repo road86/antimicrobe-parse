@@ -3,6 +3,10 @@ echo 'python parse.py'
 python parse.py
 echo 'python parse_square.py'
 python parse_square.py
+echo 'python parse_imperial.py'
+python parse_imperial.py
+echo 'python parse_khulna-mc.py'
+python parse_khulna-mc.py
 echo 'python parse_adhumic.py'
 python parse_adhumic.py
 echo 'python parse_birdem.py'
