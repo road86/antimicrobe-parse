@@ -177,7 +177,7 @@ for cfilelocs in allfileslocs:
                     'specimen':specimen,
                     'antibiotic':rrr['Antimicrobial'],
                     'mic':mic0,
-                    'result':rrr['Interpretation']
+                    'sensitivity':rrr['Interpretation']
                 }
                 megagigalist.append(new_df)
                 if not 'Antimicrobial.1' in df.columns:
@@ -191,7 +191,7 @@ for cfilelocs in allfileslocs:
                     'specimen':specimen,
                     'antibiotic':rrr['Antimicrobial.1'],
                     'mic':mic1,
-                    'result':rrr['Interpretation.1']
+                    'sensitivity':rrr['Interpretation.1']
                 }
                 megagigalist.append(new_df)
         elif 'Antibiotics' in df.columns[0]:
@@ -204,7 +204,7 @@ for cfilelocs in allfileslocs:
                     'pathogen':pathogen,
                     'specimen':specimen,
                     'antibiotic':rrr['Antibiotics'],
-                    'result':rrr['Sensitivity']
+                    'sensitivity':rrr['Sensitivity']
                 }
                 megagigalist.append(new_df)
                 if not 'Antibiotics.1' in df.columns:
@@ -217,7 +217,7 @@ for cfilelocs in allfileslocs:
                     'pathogen':pathogen,
                     'specimen':specimen,
                     'antibiotic':rrr['Antibiotics.1'],
-                    'result':rrr['Sensitivity.1']
+                    'sensitivity':rrr['Sensitivity.1']
                 }
                 megagigalist.append(new_df)
         else:

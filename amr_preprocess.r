@@ -9,15 +9,15 @@ cleaneddata <- read.csv("outdata/ast_data_clean.csv", header=TRUE)
 OutputTable <- data.frame(
   OutputTable1 <- cleaneddata %>%
     group_by(specimen_category, pathogen, antibiotic) %>%
-    summarise(count_s = sum(result == 's')),
+    summarise(count_s = sum(sensitivity == 's')),
 
   OutputTable2 <- cleaneddata %>%
     group_by(specimen_category, pathogen, antibiotic) %>%
-    summarise(count_i = sum(result == 'i')),
+    summarise(count_i = sum(sensitivity == 'i')),
 
   OutputTable3 <- cleaneddata %>%
     group_by(specimen_category, pathogen, antibiotic) %>%
-    summarise(count_r = sum(result == 'r'))
+    summarise(count_r = sum(sensitivity == 'r'))
 
 )
 # Cleaning the output table
