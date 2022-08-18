@@ -81,9 +81,9 @@ lookup_table = pd.read_excel(os.path.join('..','input_data','lookup-tables.xlsx'
 
 assigned_masks_total = pd.Series(True,ast_data.index)
 for cfield in correction_fields[:-1]: #corrections to fields
-    lookup_table[cfield] = lookup_table[cfield].dropna(subset=['correct'])
+    lookup_table[cfield] = lookup_table[cfield].dropna(subset=['spelling'])
     lookup_table[cfield]['spelling'] = lookup_table[cfield]['spelling'].apply(lambda x: x.lower())
-    cfield_rep = lookup_table[cfield].set_index('spelling')['correct'].dropna().apply(lambda x: x.lower()).to_dict()
+    cfield_rep = lookup_table[cfield].set_index('spelling')['correct'].apply(lambda x: x.lower() if type(x)==str else x).to_dict()
     data_assigned_mask = ast_data[cfield].isin(cfield_rep.keys())
     missing_cfield = ast_data[~data_assigned_mask]
     missing_keys_for = ast_data[~data_assigned_mask][cfield].unique()
@@ -100,6 +100,11 @@ for cfield in correction_fields[:-1]: #corrections to fields
 
 
 print(assigned_masks_total.value_counts())
+
+ast_data[~assigned_masks_total].to_csv(os.path.join('outdata','data_skipped.csv'))
+print('Amount of data skipped is:')
+print(len(ast_data[~assigned_masks_total]))
+
 ast_data = ast_data[assigned_masks_total]
 
 las_spec_clean = sorted(list(ast_data['specimen'].unique()))
