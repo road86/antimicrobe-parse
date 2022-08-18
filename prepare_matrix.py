@@ -7,7 +7,8 @@ import numpy as np
 def mper(val):
     return str(round(100*val))+'%'
 
-thresh=0.05
+#threshold of number of isolates tested for given antibiotic out of total number of isolates of this bacteria. If it is below the threshold we are not showing a result
+thresh=0.02
 
 prepo = pd.read_csv('pre-processed.csv')
 noi = pd.read_csv('number_of_isolates.csv')

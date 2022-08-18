@@ -139,5 +139,4 @@ ast_data_preclean = ast_data_preclean[data_assigned_mask]
 
 ast_data_preclean['specimen_category'] = ast_data_preclean['specimen'].replace(specimen_category_rep)
 
-ast_data_preclean['amr_uuid'] = [uuid.uuid4() for _ in range(len(ast_data_preclean.index))]
-ast_data_preclean.to_csv(os.path.join('outdata','ast_data_preclean_clean.csv'))
+ast_data_preclean.to_csv(os.path.join('outdata','ast_data_clean.csv'))

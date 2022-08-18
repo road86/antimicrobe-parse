@@ -159,6 +159,7 @@ for cfilelocs in allfileslocs:
         df.to_csv(os.path.join(outputloc,f'temp-file.csv'),index=False)
         df = pd.read_csv(os.path.join(outputloc,f'temp-file.csv'),index_col=False)
 
+        amr_uuid = uuid.uuid4()
         if df.columns[0]=='Antimicrobial':
             for iii, rrr in df.iterrows():
                 if 'MIC' in df.columns:
@@ -169,6 +170,7 @@ for cfilelocs in allfileslocs:
                     mic1 = 'N/A'
 
                 new_df = {
+                    'amr_uuid':amr_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -183,6 +185,7 @@ for cfilelocs in allfileslocs:
                 if not 'Antimicrobial.1' in df.columns:
                     continue
                 new_df = {
+                    'amr_uuid':amr_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -197,6 +200,7 @@ for cfilelocs in allfileslocs:
         elif 'Antibiotics' in df.columns[0]:
             for iii, rrr in df.iterrows():
                 new_df = {
+                    'amr_uuid':amr_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -210,6 +214,7 @@ for cfilelocs in allfileslocs:
                 if not 'Antibiotics.1' in df.columns:
                     continue
                 new_df = {
+                    'amr_uuid':amr_uuid,
                     'input_file_name':fnl,
                     'sample_date':sample_date,
                     'sample_sex':sample_sex,
@@ -224,9 +229,10 @@ for cfilelocs in allfileslocs:
             print('ERROR')
             vle
 
-print(f'This script processed {n_files_processed} test results')
+print(f'This script processed {n_files_processed} isolates (test result cards)')
 ast_data = pd.DataFrame.from_records(megagigalist)
 ast_data['location']=pd.Series('chittagong',index=ast_data.index)
 ast_data['provider']=pd.Series('chevron',index=ast_data.index)
 
+ast_data = ast_data.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
 ast_data.to_csv(os.path.join(f'{outputloc}','ast_data_chevron.csv'))
