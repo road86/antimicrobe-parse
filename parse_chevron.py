@@ -239,8 +239,8 @@ ast_data = ast_data.dropna(subset=['sensitivity']) #remove many datapoints for a
 nisolates = len(ast_data['amr_uuid'].unique())
 nrecords = len(ast_data['amr_uuid'])
 nantiperiso = nrecords/nisolates
-provider_name = 'chittagong'
-location_name = 'chevron'
+provider_name = 'chevron'
+location_name = 'chittagong'
 
 ast_data['location']=pd.Series(location_name,index=ast_data.index)
 ast_data['provider']=pd.Series(provider_name,index=ast_data.index)
