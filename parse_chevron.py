@@ -230,9 +230,22 @@ for cfilelocs in allfileslocs:
             vle
 
 print(f'This script processed {n_files_processed} isolates (test result cards)')
+
 ast_data = pd.DataFrame.from_records(megagigalist)
-ast_data['location']=pd.Series('chittagong',index=ast_data.index)
-ast_data['provider']=pd.Series('chevron',index=ast_data.index)
 
 ast_data = ast_data.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
+
+
+nisolates = len(ast_data['amr_uuid'].unique())
+nrecords = len(ast_data['amr_uuid'])
+nantiperiso = nrecords/nisolates
+provider_name = 'chittagong'
+location_name = 'chevron'
+
+ast_data['location']=pd.Series(location_name,index=ast_data.index)
+ast_data['provider']=pd.Series(provider_name,index=ast_data.index)
+
+
+print(f'Provider {provider_name} from {location_name} has {nisolates} isolates of bacteria with a total of {nrecords} antibiotic sensitivity tested, which is {nantiperiso:.2f} antibiotics tested per isolate')
+
 ast_data.to_csv(os.path.join(f'{outputloc}','ast_data_chevron.csv'))

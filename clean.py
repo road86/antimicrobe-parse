@@ -119,6 +119,9 @@ ast_data_preclean = ast_data[assigned_masks_total]
 print('included data by provider')
 print(ast_data_preclean.groupby('provider').count()['specimen'])
 
+print('number of isolates (by provider)')
+print(ast_data_preclean.groupby(['provider'])['amr_uuid'].nunique())
+
 las_spec_clean = sorted(list(ast_data_preclean['specimen'].unique()))
 pd.Series(las_spec_clean).to_csv(os.path.join('outdata','specimens_unique.csv'))
 
