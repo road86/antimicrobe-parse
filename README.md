@@ -6,12 +6,6 @@ conda env create -f amrenv.yml
 conda activate amrenv
 ```
 
-To finish configuration run `R` and execute
-
-```
-install.packages('dplyr')
-```
-
 # Testing
 
 To use test data, run

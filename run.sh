@@ -13,8 +13,8 @@ echo 'python parse_birdem.py'
 python parse_birdem.py
 echo 'python clean.py'
 python clean.py
-echo 'R < amr_preprocess.r --no-save'
-R < amr_preprocess.r --no-save
+echo 'python amr_preprocess.py'
+python amr_preprocess.py
 echo 'python prepare_matrix.py'
 python prepare_matrix.py
 echo 'Done!'
