@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import uuid
 
-birdem_data = os.path.join('..','input_data', 'unsorted', 'AST data_ready to use', 'BIRDEM Hospital_2021.xlsx')
+birdem_data = os.path.join('..','input_data', 'unsorted', 'AST data_ready to use', 'BIRDEM Hospital_2021-PATIENT_NAMES_REMOVED.xlsx')
 
 df = pd.read_excel(birdem_data)
 
@@ -11,7 +11,7 @@ df.insert(0,'amr_uuid', [uuid.uuid4() for _ in range(len(df.index))])
 megagigalist = []
 
 #for each antibiotic result there is a columns
-range_abio_columns = range(23, len(df.columns))
+range_abio_columns = range(22, len(df.columns))
 
 for iii, rrr in df.iterrows():
     for abioind in range_abio_columns:
