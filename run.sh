@@ -11,8 +11,12 @@ echo 'python parse_adhumic.py'
 python parse_adhumic.py
 echo 'python parse_birdem.py'
 python parse_birdem.py
-echo 'python clean.py'
-python clean.py
+echo './run_summary.sh'
+./run_summary.sh
+echo 'python compile_summary.py'
+python compile_summary.py
+echo 'python compile_individual.py'
+python compile_individual.py
 echo 'python amr_preprocess.py'
 python amr_preprocess.py
 echo 'python prepare_matrix.py'
