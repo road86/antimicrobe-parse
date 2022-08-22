@@ -10,8 +10,8 @@ df_pus = pd.read_excel(ibhkhulna_data, sheet_name = 'Pus', skiprows = 0, header 
 df_wound = pd.read_excel(ibhkhulna_data, sheet_name = 'Wound Swab', skiprows = 0, header = [1])
 df_stool = pd.read_excel(ibhkhulna_data, sheet_name = 'Stool', skiprows = 0, header = [1])
 
-os.makedirs('check') # will return error if file exists
-datacheck = 'check' 
+os.makedirs('check', exist_ok=True)
+datacheck = 'check'
 ## Checks
 df_urine.to_csv(f'{datacheck}/check_urine.csv')
 df_nipple.to_csv(f'{datacheck}/check_nipple.csv')

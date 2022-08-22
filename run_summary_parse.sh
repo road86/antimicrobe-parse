@@ -1,0 +1,10 @@
+set -e
+python parse_summary-ibh-khulna.py
+python parse_summary_akiji.py
+python parse_summary_ibh-barisal.py
+python parse_summary_ibh-dhaka.py
+python parse_summary_ibh-rajshahi.py
+python parse_summary_ma-o-shishu.py
+python parse_summary_popular.py
+python parse_summary_poultry-BARC.py
+python parse_summary_rabeya.py

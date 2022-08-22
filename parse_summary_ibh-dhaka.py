@@ -6,7 +6,7 @@ ibhdhaka_data = os.path.join('..','input_data', 'unsorted', 'AST data_ready to u
 
 df = pd.read_excel(ibhdhaka_data, skiprows = 2, header = [3]) #skipping non-data info on top and defining the header
 
-os.makedirs('check') # creting a folder to store temporary checks in script
+os.makedirs('check', exist_ok=True)
 datacheck = 'check' # folder to store script checks
 df.to_csv(f'{datacheck}/check.csv') #checking if skiprows and header give the desired result
 

@@ -11,8 +11,8 @@ df_stool = pd.read_excel(popularrangpur_data, sheet_name = 'Stool', skiprows = 0
 df_hvs = pd.read_excel(popularrangpur_data, sheet_name = 'High Vaginal Swab', skiprows = 0, header = [1])
 df_sputum = pd.read_excel(popularrangpur_data, sheet_name = 'Sputum', skiprows = 0, header = [1])
 
-os.makedirs('check') # will return error if file exists
-datacheck = 'check' 
+os.makedirs('check', exist_ok=True)
+datacheck = 'check'
 ## Checks
 df_urine.to_csv(f'{datacheck}/check_urinepop.csv')
 df_pus.to_csv(f'{datacheck}/check_puspop.csv')

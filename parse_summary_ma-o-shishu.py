@@ -4,6 +4,9 @@ import os
 
 mos_data = os.path.join('..','input_data', 'unsorted', 'Data Updating', 'Chattogram Ma O Shishu Hospital_2021 (1).xlsx')
 
+print(f'Not working yet input file missing: {mos_data}')
+exit(0)
+
 df_urine = pd.read_excel(mos_data, sheet_name = 'Urine', skiprows = 1, header = [2])
 df_wound = pd.read_excel(mos_data, sheet_name = 'Wound', skiprows = 0, header = [1])
 df_trachea = pd.read_excel(mos_data, sheet_name = 'Tracheal Aspirate', skiprows = 0, header = [1])
@@ -12,7 +15,7 @@ df_blood = pd.read_excel(mos_data, sheet_name = 'Blood', skiprows = 0, header = 
 df_sputum = pd.read_excel(mos_data, sheet_name = 'Sputum', skiprows = 0, header = [1])
 
 os.makedirs('check') # will return error if file exists
-datacheck = 'check' 
+datacheck = 'check'
 ## Checks
 df_urine.to_csv(f'{datacheck}/check_urinemos.csv')
 df_wound.to_csv(f'{datacheck}/check_woundmos.csv')

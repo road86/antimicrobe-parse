@@ -9,8 +9,8 @@ df_urine = pd.read_excel(akij_data, sheet_name = 'Urine', skiprows = 0, header =
 df_pus = pd.read_excel(akij_data, sheet_name = 'Pus', skiprows = 0, header = [1])
 df_stool = pd.read_excel(akij_data, sheet_name = 'Stool', skiprows = 0, header = [1])
 
-os.makedirs('check') # will return error if file exists
-datacheck = 'check' 
+os.makedirs('check', exist_ok=True)
+datacheck = 'check'
 ## Checks
 df_blood.to_csv(f'{datacheck}/check_blood_akij.csv')
 df_urine.to_csv(f'{datacheck}/check_urine_akij.csv')
