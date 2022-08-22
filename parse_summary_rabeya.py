@@ -4,10 +4,6 @@ import os
 
 rabeya_data = os.path.join('..','input_data', 'unsorted', 'AST data_ready to use', 'Jalalabag Ragib-Rabeya Med Col_Aug 20, 2022 (1).xlsx')
 
-
-print(f'Not working yet input file missing: {rabeya_data}')
-exit(0)
-
 df_urine = pd.read_excel(rabeya_data, sheet_name = 'Urine', skiprows = 1, header = [2])
 df_pus = pd.read_excel(rabeya_data, sheet_name = 'Pus', skiprows = 0, header = [1])
 df_wound = pd.read_excel(rabeya_data, sheet_name = 'Wound Swab', skiprows = 0, header = [1])
@@ -15,7 +11,7 @@ df_stool = pd.read_excel(rabeya_data, sheet_name = 'Stool', skiprows = 0, header
 df_blood = pd.read_excel(rabeya_data, sheet_name = 'Blood', skiprows = 0, header = [1])
 df_sputum = pd.read_excel(rabeya_data, sheet_name = 'Sputum', skiprows = 0, header = [1])
 
-os.makedirs('check') # will return error if file exists
+os.makedirs('check', exist_ok=True)
 datacheck = 'check'
 ## Checks
 df_urine.to_csv(f'{datacheck}/check_uriner.csv')

@@ -5,9 +5,6 @@ import os
 
 ibhbarisal_data = os.path.join('..','input_data', 'unsorted', 'AST data_ready to use', 'Islami Bank Hospital, Barishal_2021-2022 (1).xlsx')
 
-print(f'Not working yet input file missing: {ibhbarisal_data}')
-exit(0)
-
 df_urine = pd.read_excel(ibhbarisal_data, sheet_name = 'Urine', skiprows = 1, header = [2])
 df_pus = pd.read_excel(ibhbarisal_data, sheet_name = 'Pus', skiprows = 0, header = [1])
 df_wound = pd.read_excel(ibhbarisal_data, sheet_name = 'Wound Swab', skiprows = 0, header = [1])
