@@ -3,7 +3,7 @@ import re
 import os
 import uuid
 
-def clean(ast_data, summary=False):
+def clean(ast_data, summary=False, animal=False):
     #clean all starting with "growth of.."
     growth = re.compile('growth.*?Of',re.IGNORECASE)
     ast_data['pathogen'] = ast_data['pathogen'].astype(str).apply(lambda x: re.sub(growth,'',x))
@@ -43,14 +43,14 @@ def clean(ast_data, summary=False):
     #####
     ## Specimen
     ####
+    if not animal:
+        ast_data['specimen'] = ast_data['specimen'].astype(str).apply(lambda x: re.sub(" +", " ", x)) # remove multiple spaces
 
-    ast_data['specimen'] = ast_data['specimen'].astype(str).apply(lambda x: re.sub(" +", " ", x)) # remove multiple spaces
-
-    ast_data['specimen'] = ast_data['specimen'].apply(lambda x: x.replace(' /','/').replace('/ ','/').lstrip().rstrip().lower().lstrip('/').rstrip('/').lstrip('('))
+        ast_data['specimen'] = ast_data['specimen'].apply(lambda x: x.replace(' /','/').replace('/ ','/').lstrip().rstrip().lower().lstrip('/').rstrip('/').lstrip('('))
 
 
-    las_spec = sorted(list(ast_data['specimen'].unique()))
-    pd.Series(las_spec).to_csv(os.path.join('outdata','all_specimen_spelling.csv'))
+        las_spec = sorted(list(ast_data['specimen'].unique()))
+        pd.Series(las_spec).to_csv(os.path.join('outdata','all_specimen_spelling.csv'))
 
     # ast_data.to_csv(os.path.join('outdata','ast_data_chevron_to_clean.csv'))
 
@@ -69,6 +69,8 @@ def clean(ast_data, summary=False):
     for cfield in correction_fields[:-1]: #corrections to fields
         if summary and cfield=="sensitivity":
             continue # skip fixing sensitivity
+        if animal and cfield=="specimen":
+            continue # skip fixing specimen for animals
         print('##############################')
         print(cfield)
         print('##############################')
@@ -98,7 +100,7 @@ def clean(ast_data, summary=False):
         print(data_assigned_mask_no_nan.sum())
 
         print('excluded data by provider')
-        print(ast_data[(~data_assigned_mask_no_nan)].groupby('provider').count()['specimen'])
+        print(ast_data[(~data_assigned_mask_no_nan)].groupby('provider').count()['location'])
 
 
         assigned_masks_total=(data_assigned_mask_no_nan) & (assigned_masks_total)
@@ -117,40 +119,41 @@ def clean(ast_data, summary=False):
     print('Amount of data skipped is:')
     print(len(ast_data[~assigned_masks_total]))
     print('excluded data by provider')
-    print(misme.groupby('provider').count()['specimen'])
+    print(misme.groupby('provider').count()['location'])
 
     ast_data_preclean = ast_data[assigned_masks_total]
 
 
     print('included data by provider')
-    print(ast_data_preclean.groupby('provider').count()['specimen'])
+    print(ast_data_preclean.groupby('provider').count()['location'])
 
     if not summary:
         print('number of isolates (by provider)')
         print(ast_data_preclean.groupby(['provider'])['amr_uuid'].nunique())
 
-    las_spec_clean = sorted(list(ast_data_preclean['specimen'].unique()))
-    pd.Series(las_spec_clean).to_csv(os.path.join('outdata','specimens_unique.csv'))
+    if not animal:
+        las_spec_clean = sorted(list(ast_data_preclean['specimen'].unique()))
+        pd.Series(las_spec_clean).to_csv(os.path.join('outdata','specimens_unique.csv'))
 
-    print('##############################')
-    print('Setting specimen category')
-    print('##############################')
+        print('##############################')
+        print('Setting specimen category')
+        print('##############################')
 
-    try:
-        lookup_table['specimen_category']['category'] = lookup_table['specimen_category']['category'].apply(lambda x: x.lower())
-    except:
-        print('if the following line breaks it would be because some of the speciment on the list have no specimen_category')
+        try:
+            lookup_table['specimen_category']['category'] = lookup_table['specimen_category']['category'].apply(lambda x: x.lower())
+        except:
+            print('if the following line breaks it would be because some of the speciment on the list have no specimen_category')
 
-    specimen_category_rep = lookup_table['specimen_category'].set_index('specimen')['category'].dropna().apply(lambda x: x.lower()).to_dict()
+        specimen_category_rep = lookup_table['specimen_category'].set_index('specimen')['category'].dropna().apply(lambda x: x.lower()).to_dict()
 
-    data_assigned_mask_speccat = ast_data_preclean['specimen'].isin(specimen_category_rep.keys())
+        data_assigned_mask_speccat = ast_data_preclean['specimen'].isin(specimen_category_rep.keys())
 
-    missing_specimen_category = ast_data_preclean[~data_assigned_mask_speccat]
+        missing_specimen_category = ast_data_preclean[~data_assigned_mask_speccat]
 
-    print(f'The following specimen_category keys are missing')
-    print(missing_specimen_category['specimen'].unique())
-    ast_data_preclean = ast_data_preclean[data_assigned_mask_speccat]
+        print(f'The following specimen_category keys are missing')
+        print(missing_specimen_category['specimen'].unique())
+        ast_data_preclean = ast_data_preclean[data_assigned_mask_speccat]
 
-    ast_data_preclean['specimen_category'] = ast_data_preclean['specimen'].replace(specimen_category_rep)
+        ast_data_preclean['specimen_category'] = ast_data_preclean['specimen'].replace(specimen_category_rep)
 
     return ast_data_preclean
