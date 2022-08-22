@@ -80,7 +80,7 @@ for iii, rrr in df_stool.iterrows():
         stool_df['specimen']='Stool'
         megagigalist.append(stool_df)
 
-# High Vaginal Swab
+# High Blood
 for iii, rrr in df_blood.iterrows():
     for abioind5 in range_abio_blood:
         blood_df = {
