@@ -11,8 +11,8 @@ echo 'python parse_adhumic.py'
 python parse_adhumic.py
 echo 'python parse_birdem.py'
 python parse_birdem.py
-echo './run_summary.sh'
-./run_summary.sh
+echo './run_summary_parse.sh'
+./run_summary_parse.sh
 echo 'python compile_summary.py'
 python compile_summary.py
 echo 'python compile_individual.py'
