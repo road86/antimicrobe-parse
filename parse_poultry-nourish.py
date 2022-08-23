@@ -5,61 +5,43 @@ import os
 
 nourish_data = os.path.join('..','input_data', 'unsorted', 'Animal Health data', 'Antibiotic Sensitivity Report@ 20.08.22.xlsx')
 
-
-df1 = pd.read_excel(nourish_data, sheet_name = 'E.Coli', skiprows = 3, nrows= 25, header = [4])
+#from the header (niso = int(df1.columns[2].split('(')[1].split(')')[0])) we can red how many rows are needed
+df0 = pd.read_excel(nourish_data, sheet_name = 'E.Coli', skiprows = 3, nrows= 25, header = [4])
 df2 = pd.read_excel(nourish_data, sheet_name = 'Staphylococcus', skiprows = 3, nrows= 23, header = [4])
 df3 = pd.read_excel(nourish_data, sheet_name = 'Pseudomonas', skiprows = 3, nrows= 25, header = [4])
 
 ##checking
 datacheck = 'check' # folder to store script checks
-df1.to_csv(f'{datacheck}/nourish1.csv') #checking if skiprows and header give the desired result
+df0.to_csv(f'{datacheck}/nourish1.csv') #checking if skiprows and header give the desired result
 df2.to_csv(f'{datacheck}/nourish2.csv')
 df3.to_csv(f'{datacheck}/nourish3.csv')
 ##################
 
-#for each antibiotic result there is a columns
-abio_columns_1 = range(3, len(df1.columns))
-abio_columns_2 = range(3, len(df2.columns))
-abio_columns_3 = range(3, len(df3.columns))
 
-megagigalist = []
+preped_frames = []
 
-# for E. coli
-for iii, rrr in df1.iterrows():
-    for abioind1 in abio_columns_1:
-        new_df1 = {
-            'pathogen': rrr['Name of pathogen'],
-            'antibiotic': rrr.index[abioind1],
-            'sensitivity': rrr[rrr.index[abioind1]]
-        }
-        new_df1['Isolates']=25
-        megagigalist.append(new_df1)
+for df1 in [df0, df2, df3]:
+    ecoli = pd.melt(df1,id_vars=df1.columns[0:3], value_vars=df1.columns[3:],var_name='antibiotic', value_name='sensitivity')
+    ecoli.columns = ['serial','pathogen','skip','antibiotic','sensitivity']
+    ecoli2 = ecoli.groupby(['pathogen','antibiotic','sensitivity'])['serial'].count().reset_index()
 
-# for Staphylococcus
-for iii, rrr in df2.iterrows():
-    for abioind2 in abio_columns_2:
-        new_df2 = {
-            'pathogen': rrr['Name of pathogen'],
-            'antibiotic': rrr.index[abioind2],
-            'sensitivity': rrr[rrr.index[abioind2]]
-        }
-        new_df2['Isolates']=23
-        megagigalist.append(new_df2)
+    ecoli3 = pd.pivot(ecoli2, index=['pathogen','antibiotic'], columns='sensitivity', values='serial').reset_index().fillna(0)
 
-# for
-for iii, rrr in df3.iterrows():
-    for abioind3 in abio_columns_3:
-        new_df3 = {
-            'pathogen': rrr['Name of pathogen'],
-            'antibiotic': rrr.index[abioind3],
-            'sensitivity': rrr[rrr.index[abioind3]]
-        }
-        new_df3['Isolates']=25
-        megagigalist.append(new_df3)
+    ecoli3['sensitivity'] = ecoli3.apply(lambda x: x['R']/(x['NR']+x['R']),axis=1)
+    ecoli3 = ecoli3[['pathogen', 'antibiotic', 'R', 'sensitivity']]
+    ecoli3.columns = ['pathogen', 'antibiotic', 'sensitive_isolates', 'sensitivity']
 
+    niso = int(df1.columns[2].split('(')[1].split(')')[0])
+
+    ecoli3['isolates_number']=pd.Series(niso,index=ecoli3.index)
+    ecoli3['location']=pd.Series('unkown',index=ecoli3.index)
+    ecoli3['provider']=pd.Series('nourish',index=ecoli3.index)
+    preped_frames.append(ecoli3)
+
+poultry_data = pd.concat(preped_frames)
 
 outputloc = "outdata"
 
-poultry_data = pd.DataFrame.from_records(megagigalist)
 poultry_data = poultry_data.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
 
+poultry_data.to_csv(f'{outputloc}/ast_poultry_nourish.csv')

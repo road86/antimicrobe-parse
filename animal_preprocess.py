@@ -18,7 +18,7 @@ prep_sum = prepdata3[['specimen_category', 'pathogen', 'antibiotic', 'sensitive_
 prep_sum.columns = ['specimen_category', 'pathogen', 'antibiotic', 'sensitive_isolates', 'total']
 preped_frames.append(prep_sum)
 
-prepnoiso_sum = cleaneddata_summary[['specimen_category','pathogen','isolates_number']].drop_duplicates()
+prepnoiso_sum = indata_summary[['specimen_category','pathogen','isolates_number']].drop_duplicates()
 
 prepnoiso_sum.columns = ['specimen_category', 'pathogen', 'number_of_isolates']
 preped_noiso_frames.append(prepnoiso_sum)
