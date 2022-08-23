@@ -3,7 +3,8 @@ import os
 
 indata = pd.read_csv(os.path.join("outdata","ast_data_clean.csv"))
 indata_summary = pd.read_csv(os.path.join("outdata","ast_data_summary_clean.csv"))
-
+#I suggest that we do not use summary data at all until we verify its quality by seeing input data and their calculations https://github.com/road86/project-amr/issues/19
+indata_summary = indata_summary.iloc[0:0]
 
 
 providers = list(indata['provider'].unique()) + list(indata_summary['provider'].unique())
