@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 indata_summary = pd.read_csv(os.path.join("outdata","ast_data_animal_clean.csv"))
-prov=indata_summary['provider']
+prov=list(indata_summary['provider'].unique())
 loc='any'
 
 list_of_versions = list()
@@ -27,7 +27,7 @@ preped_noiso_frames.append(prepnoiso_sum)
 
 prep_both = pd.concat(preped_frames)
 
-prep_both = prep_both.groupby(['provider', 'specimen_category','pathogen','antibiotic']).sum()[['sensitive_isolates','total']].reset_index()
+prep_both = prep_both.groupby(['specimen_category','pathogen','antibiotic']).sum()[['sensitive_isolates','total']].reset_index()
 prep_both['sensitivity'] = prep_both.apply(lambda x: x['sensitive_isolates']/x['total'],axis=1)
 prep_both.to_csv(os.path.join('outdata',f'pre-processed-{prov}-{loc}.csv'))
 
