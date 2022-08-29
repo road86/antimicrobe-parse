@@ -3,7 +3,7 @@ import os
 import amr_utils
 
 
-preprocessed_animal_files = ['ast_poultry_aftab.csv','ast_poultry_BARC.csv' , 'ast_poultry_nourish.csv', 'ast_poultry_cdil.csv']
+preprocessed_animal_files = ['ast_poultry_aftab.csv','ast_poultry_BARC.csv' , 'ast_poultry_nourish.csv', 'ast_poultry_cdil.csv', 'ast_poultry_paragon.csv', 'ast_poultry_sylhet.csv']
 
 indata_dir = 'outdata'
 list_of_dfs = []
