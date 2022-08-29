@@ -36,7 +36,7 @@ thresh = df2.set_index('Unnamed: 2').T
 
 ast_data['mic'] = pd.to_numeric(ast_data['mic'],errors='coerce')
 ast_data = ast_data.dropna(subset=['mic'])
-ast_data['sensitivity'] = ast_data.apply(lambda x: 'S' if x['mic'] >= thresh.loc[x['antibiotic']]['CLSI S >='] else 'R' if x['mic'] <= thresh.loc[x['antibiotic']]['CLSI R<='] else 'I', axis = 1)
+ast_data['sensitivity'] = ast_data.apply(lambda x: 's' if x['mic'] >= thresh.loc[x['antibiotic']]['CLSI S >='] else 'r' if x['mic'] <= thresh.loc[x['antibiotic']]['CLSI R<='] else 'i', axis = 1)
 
 nisolates = len(ast_data['amr_uuid'].unique())
 nrecords = len(ast_data['amr_uuid'])
@@ -44,10 +44,26 @@ nantiperiso = nrecords/nisolates
 provider_name = 'cdil'
 location_name = 'dhaka'
 
-ast_data['location']=pd.Series(location_name,index=ast_data.index)
-ast_data['provider']=pd.Series(provider_name,index=ast_data.index)
 
 
 print(f'Provider {provider_name} from {location_name} has {nisolates} isolates of bacteria with a total of {nrecords} antibiotic sensitivity tested, which is {nantiperiso:.2f} antibiotics tested per isolate')
 
-ast_data.to_csv(os.path.join('outdata',f'ast_poultry_cdil.csv'))
+prepdata = ast_data.groupby(['pathogen','antibiotic','sensitivity'])['amr_uuid'].count().reset_index()
+
+ast_poultry = pd.pivot(prepdata, index=['pathogen','antibiotic'], columns='sensitivity', values='amr_uuid').reset_index()
+
+ast_poultry.columns = ['pathogen', 'antibiotic', 'count_i', 'count_r', 'count_s']
+
+ast_poultry = ast_poultry.fillna(0)
+ast_poultry['total'] = ast_poultry[list(ast_poultry.columns[2:])].sum(axis=1)
+
+ast_poultry['sensitive_isolates'] = ast_poultry['count_s']
+ast_poultry['sensitivity'] = ast_poultry.apply(lambda x: x['count_s']/(x['total']),axis=1)
+
+niso = ast_data.groupby(['pathogen'])['amr_uuid'].nunique().reset_index().iloc[0]['amr_uuid']
+ast_poultry = ast_poultry[['pathogen', 'antibiotic','sensitive_isolates', 'sensitivity']]
+ast_poultry['isolates_number']=pd.Series(niso,index=ast_poultry.index)
+ast_poultry['location']=pd.Series(location_name,index=ast_poultry.index)
+ast_poultry['provider']=pd.Series(provider_name,index=ast_poultry.index)
+
+ast_poultry.to_csv(os.path.join('outdata',f'ast_poultry_cdil.csv'))
