@@ -1,5 +1,7 @@
 set -e
 python parse_summary_poultry-BARC.py
+python parse_summary_poultry-Paragon.py
+python parse_summary_poultry-Sylhet.py
 python parse_poultry-aftab.py
 python parse_poultry-nourish.py
 python parse_poultry-CDIL.py
