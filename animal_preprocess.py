@@ -32,13 +32,16 @@ for prov in provs:
     prepdata3 = ecoli.groupby(['specimen_category','pathogen','antibiotic']).sum()[['sensitive_isolates','isolates_number']].reset_index()
     prep_sum = prepdata3[['specimen_category', 'pathogen', 'antibiotic', 'sensitive_isolates','isolates_number']]
     prep_sum.columns = ['specimen_category', 'pathogen', 'antibiotic', 'sensitive_isolates', 'total']
+    
+    
     preped_frames.append(prep_sum)
 
-    prepnoiso_sum = ecoli[['specimen_category','pathogen','isolates_number']].drop_duplicates()
+    prepdata2 = ecoli[['specimen_category','pathogen','isolates_number']].drop_duplicates()
+    prepnoiso_sum = prepdata2.groupby(['specimen_category','pathogen']).sum()[['isolates_number']].reset_index()
 
     prepnoiso_sum.columns = ['specimen_category', 'pathogen', 'number_of_isolates']
     preped_noiso_frames.append(prepnoiso_sum)
-
+    
     prep_both = pd.concat(preped_frames)
 
     prep_both = prep_both.groupby(['specimen_category','pathogen','antibiotic']).sum()[['sensitive_isolates','total']].reset_index()
