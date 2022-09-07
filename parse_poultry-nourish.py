@@ -35,7 +35,7 @@ for df1 in [df0, df2, df3]:
 
     ecoli3['isolates_number']=pd.Series(niso,index=ecoli3.index)
     ecoli3['location']=pd.Series('unkown',index=ecoli3.index)
-    ecoli3['provider']=pd.Series('nourish',index=ecoli3.index)
+    ecoli3['provider']=pd.Series('Nourish',index=ecoli3.index)
     preped_frames.append(ecoli3)
 
 poultry_data = pd.concat(preped_frames)

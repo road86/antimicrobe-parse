@@ -30,7 +30,8 @@ outputloc = "outdata"
 
 ast_poultry = pd.DataFrame.from_records(megagigalist)
 ast_poultry['sensitivity']=ast_poultry['sensitive_isolates']/ast_poultry['isolates_number']
-ast_poultry['location']=pd.Series('dhaka',index=ast_poultry.index)
+ast_poultry['location']=pd.Series('unknown',index=ast_poultry.index)
 ast_poultry['provider']=pd.Series('Aftab',index=ast_poultry.index)
+
 
 ast_poultry.to_csv(f'{outputloc}/ast_poultry_aftab.csv')

@@ -41,7 +41,7 @@ ast_data['sensitivity'] = ast_data.apply(lambda x: 's' if x['mic'] >= thresh.loc
 nisolates = len(ast_data['amr_uuid'].unique())
 nrecords = len(ast_data['amr_uuid'])
 nantiperiso = nrecords/nisolates
-provider_name = 'cdil'
+provider_name = 'CDIL'
 location_name = 'dhaka'
 
 
