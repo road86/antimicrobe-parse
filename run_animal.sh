@@ -5,6 +5,7 @@ python parse_summary_poultry-Sylhet.py
 python parse_poultry-aftab.py
 python parse_poultry-nourish.py
 python parse_poultry-CDIL.py
+python parse_summary_poultry-BLRI.py
 python compile_animal.py
 python animal_preprocess.py
 python prepare_matrix.py
