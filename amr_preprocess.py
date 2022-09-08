@@ -4,7 +4,7 @@ import os
 indata = pd.read_csv(os.path.join("outdata","ast_data_clean.csv"))
 indata_summary = pd.read_csv(os.path.join("outdata","ast_data_summary_clean.csv"))
 #I suggest that we do not use summary data at all until we verify its quality by seeing input data and their calculations https://github.com/road86/project-amr/issues/19
-indata_summary = indata_summary.iloc[0:0]
+
 
 
 providers = list(indata['provider'].unique()) + list(indata_summary['provider'].unique())
@@ -60,18 +60,21 @@ for maskey in masks.keys():
         prep_sum.columns = ['specimen_category', 'pathogen', 'antibiotic', 'sensitive_isolates', 'total']
         preped_frames.append(prep_sum)
 
-        prepnoiso_sum = cleaneddata_summary[['specimen_category','pathogen','isolates_number']].drop_duplicates()
-
+        prepnoiso = cleaneddata_summary[['specimen_category','pathogen','isolates_number']].drop_duplicates()
+        prepnoiso_sum = prepnoiso.groupby(['specimen_category','pathogen']).sum()[['isolates_number']].reset_index()
+    
         prepnoiso_sum.columns = ['specimen_category', 'pathogen', 'number_of_isolates']
         preped_noiso_frames.append(prepnoiso_sum)
 
+    
     prep_both = pd.concat(preped_frames)
 
     prep_both = prep_both.groupby(['specimen_category','pathogen','antibiotic']).sum()[['sensitive_isolates','total']].reset_index()
     prep_both['sensitivity'] = prep_both.apply(lambda x: x['sensitive_isolates']/x['total'],axis=1)
     prep_both.to_csv(os.path.join('outdata',f'pre-processed-{prov}-{loc}.csv'))
 
-    prep_both_niso = pd.concat(preped_noiso_frames)
+    prep_df = pd.concat(preped_noiso_frames)
+    prep_both_niso = prep_df.groupby(['specimen_category','pathogen']).sum()[['number_of_isolates']].reset_index()
     prep_both_niso.to_csv(os.path.join('outdata',f'number-of-isolates-{prov}-{loc}.csv'))
 
 
