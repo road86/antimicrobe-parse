@@ -31,7 +31,7 @@ outputloc = "outdata"
 ast_poultry = pd.DataFrame.from_records(megagigalist)
 ast_poultry['sensitivity']=ast_poultry['sensitive_isolates']/ast_poultry['isolates_number']
 ast_poultry['location']=pd.Series('Sylhet',index=ast_poultry.index)
-ast_poultry['provider']=pd.Series('Sylhet',index=ast_poultry.index)
+ast_poultry['provider']=pd.Series('SAU',index=ast_poultry.index)
 
 ast_poultry =  ast_poultry.dropna(subset=['sensitivity']) #remove many datapoints for antibiotics not tested for each sample
 
