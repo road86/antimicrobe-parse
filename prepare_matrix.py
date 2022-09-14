@@ -1,9 +1,11 @@
+from ast import Lambda
 import pandas as pd
 import uuid
 from openpyxl.styles import PatternFill
 from openpyxl.styles import Alignment
 import numpy as np
 import os
+
 
 def mper(val):
     return str(round(100*val))+'%'
@@ -18,12 +20,12 @@ for _, ver in list_of_versions.iterrows():
     loc = ver['location']
 
     prepo = pd.read_csv(os.path.join('outdata',f'pre-processed-{prov}-{loc}.csv'))
+    prepo['pathogen'] = prepo['pathogen'].str.capitalize()
     noi = pd.read_csv(os.path.join('outdata',f'number-of-isolates-{prov}-{loc}.csv'))
-
+    noi['pathogen'] = noi['pathogen'].str.capitalize()
     # rawsummary = pd.merge(prepo,noi, on = ['specimen_category','pathogen'])
     # easier to use to dfs for noi and rest of the data
     rawsummary = prepo[['specimen_category', 'pathogen', 'antibiotic', 'total', 'sensitivity']]
-
 
     #  ######
     #    ##
@@ -84,7 +86,9 @@ for _, ver in list_of_versions.iterrows():
                         n_times_per = atot[pat] * aperc[pat]
                         oversense = oversense + n_times_per
                 new_row['overall sensitivity','%'] = mper(oversense/atot.sum())
+                
                 full_amb_list.append(new_row)
+                
 
             full_amb_index = ['Total number of isolates'] + list(amb_matrix_perc.index)
 
