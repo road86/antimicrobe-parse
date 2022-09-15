@@ -1,6 +1,7 @@
 from ast import Lambda
 import pandas as pd
 import uuid
+import openpyxl
 from openpyxl.styles import PatternFill
 from openpyxl.styles import Alignment
 import numpy as np
@@ -58,6 +59,8 @@ for _, ver in list_of_versions.iterrows():
 
             total_n_iso = df_n['number_of_isolates'].sum()
             new_row[('total','--')] = total_n_iso
+            df_n = df_n.sort_values(by=['number_of_isolates'], ascending = False).head(5) # Taking only top 5 pathogens per specimen type
+
 
             for pat, niso in df_n.iterrows():
                 new_row[(pat,'n')] = niso['number_of_isolates']
@@ -67,6 +70,7 @@ for _, ver in list_of_versions.iterrows():
             new_row[('overall sensitivity','%')] = '--'
             full_amb_list.append(new_row)
             tots_row = new_row
+
 
             for (antibio, aperc), (_, atot) in zip(amb_matrix_perc.iterrows(), amb_matrix_tot.iterrows()):
                 new_row = dict()
@@ -141,3 +145,7 @@ for _, ver in list_of_versions.iterrows():
             for ccc in range(1,len(full_amb.columns)+2):
                 worksheet.cell(row=4,column=ccc).fill = PatternFill("solid", start_color='6495ed')
             worksheet.delete_rows(3,1)
+            worksheet.cell(row=2, column=1).value=None # getting rid of the line "number of isolates and sensitivity"
+            worksheet.cell(row=1,column=1).alignment = Alignment(horizontal='center', vertical='center') #fixing the alignment for "Pathogen"
+
+            
