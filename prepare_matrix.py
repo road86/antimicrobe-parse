@@ -119,6 +119,7 @@ for _, ver in list_of_versions.iterrows():
    
             overall_sens = overall_sens.loc[:, ["overall sensitivity"]].sort_values(by=[("overall sensitivity", "%")], ascending=False).drop('Total number of isolates')
             
+            full_amb = full_amb.drop('overall sensitivity', axis=1, level=0)
             full_amb.to_excel(writer,sheet_name=specimen_type, startrow=0, startcol=0)
             
             overall_sens.to_excel(writer,sheet_name=specimen_type, startrow=1, startcol=full_amb.shape[0]+1)
