@@ -4,6 +4,10 @@ import os
 indata_summary = pd.read_csv(os.path.join("outdata","ast_data_animal_clean.csv"))
 loc='any'
 
+indata_summary['provider']
+
+
+
 list_of_versions = list()
 # a little hack, We are creating for poultry one antibiogram file with sheets for each
 provs = ['poultry','poultry_ecoli']
@@ -40,6 +44,7 @@ for prov in provs:
     prepnoiso_sum = prepdata2.groupby(['specimen_category','pathogen']).sum()[['isolates_number']].reset_index()
 
     prepnoiso_sum.columns = ['specimen_category', 'pathogen', 'number_of_isolates']
+    
     preped_noiso_frames.append(prepnoiso_sum)
     
     prep_both = pd.concat(preped_frames)

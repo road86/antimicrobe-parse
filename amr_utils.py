@@ -5,7 +5,7 @@ import uuid
 
 def clean(ast_data, summary=False, animal=False):
     #clean all starting with "growth of.."
-    growth = re.compile('growth.*?Of',re.IGNORECASE)
+    growth = re.compile('growth.*?Of', re.IGNORECASE)
     ast_data['pathogen'] = ast_data['pathogen'].astype(str).apply(lambda x: re.sub(growth,'',x))
 
     #general cleaning of post and prefixes and leading spaces
