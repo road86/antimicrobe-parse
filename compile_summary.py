@@ -3,7 +3,7 @@ import os
 import amr_utils
 
 
-preprocessed_summary_files = ['ast_data_akij.csv','ast_data_ragib_rabeya_mc.csv','ast_data_popular_diagnostic_rangpur.csv','ast_data_ibhdhaka.csv','ast_data_ibhkhulna.csv','ast_data_ibhbarisal.csv', 'ast_data_maa_o_shishu.csv', 'ast_data_ibhrajshahi.csv']
+preprocessed_summary_files = ['ast_data_akij.csv','ast_data_ragib_rabeya_mc.csv','ast_data_popular_diagnostic_rangpur.csv','ast_data_ibhdhaka.csv','ast_data_ibhkhulna.csv','ast_data_ibhbarisal.csv', 'ast_data_maa_o_shishu.csv', 'ast_data_ibhrajshahi.csv', 'ast_data_bbaria_mc.csv']
 
 indata_dir = 'outdata'
 list_of_dfs = []

@@ -38,11 +38,13 @@ megagigalist = []
 fileslocs1 = os.path.join('..','input_data','21-chittagong-chevron','July to September, 2021')
 fileslocs= os.path.join('..','input_data','20-chittagong-chevron','Chevron Results 20201226')
 fileslocs2 = os.path.join('..','input_data','21-chittagong-chevron','March to June, 2021')
+#fileslocs3 = os.path.join('..','input_data','21-chittagong-chevron','Chevron FAO AST Dump 202109-202206')
 
 allfileslocs = []
 allfileslocs.append(fileslocs)
 allfileslocs.append(fileslocs1)
 allfileslocs.append(fileslocs2)
+#allfileslocs.append(fileslocs3)
 
 outputloc = "outdata"
 n_files_processed = 0

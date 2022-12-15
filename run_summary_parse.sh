@@ -7,3 +7,4 @@ python parse_summary_ibh-rajshahi.py
 python parse_summary_ma-o-shishu.py
 python parse_summary_popular.py
 python parse_summary_rabeya.py
+python parse_summary_bbariamc.py

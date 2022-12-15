@@ -124,6 +124,7 @@ for _, ver in list_of_versions.iterrows():
             
             overall_sens.to_excel(writer,sheet_name=specimen_type, startrow=1, startcol=full_amb.shape[0]+1)
             #the line above still needs tweaking, in case of some xlsx files this second table gets pushed 9 or more columns to the right
+          
             # Set backgrund colors depending on cell values
             worksheet = writer.sheets[specimen_type]
 
@@ -188,7 +189,7 @@ for _, ver in list_of_versions.iterrows():
 
 
             #for rrr in range(heading_size+2,heading_size+1+len(overall_sens)):
-             #   for ccc in list(range(2,len(overall_sens.columns)+1,2))+[len(overall_sens.columns)+1]:
+             #   for ccc in list(range(4,len(overall_sens.columns)+1,2))+[len(overall_sens.columns)+1]:
               #      value_str = worksheet.cell(row=rrr,column=ccc).value
                #     if value_str == '--':
                 #        worksheet.cell(row=rrr,column=ccc).fill = PatternFill("solid", start_color=('ededed'))
