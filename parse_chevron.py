@@ -38,13 +38,13 @@ megagigalist = []
 fileslocs1 = os.path.join('..','input_data','21-chittagong-chevron','July to September, 2021')
 fileslocs= os.path.join('..','input_data','20-chittagong-chevron','Chevron Results 20201226')
 fileslocs2 = os.path.join('..','input_data','21-chittagong-chevron','March to June, 2021')
-#fileslocs3 = os.path.join('..','input_data','21-chittagong-chevron','Chevron FAO AST Dump 202109-202206')
+fileslocs3 = os.path.join('..','input_data','21-chittagong-chevron','Chevron FAO AST Dump 202109-202206')
 
 allfileslocs = []
 allfileslocs.append(fileslocs)
 allfileslocs.append(fileslocs1)
 allfileslocs.append(fileslocs2)
-#allfileslocs.append(fileslocs3)
+allfileslocs.append(fileslocs3)
 
 outputloc = "outdata"
 n_files_processed = 0
@@ -118,8 +118,16 @@ for cfilelocs in allfileslocs:
         #####
 
         #random messups in machine output?
+
+
         randmess = re.compile('InterpretRation')
-        ctt0a = re.sub(randmess,'Interpretation',ctt0)
+        ctt0a0 = re.sub(randmess,'Interpretation',ctt0)
+
+        randmess = re.compile('InterpretSation')
+        ctt0a1 = re.sub(randmess,'Interpretation',ctt0a0)
+
+        randmess = re.compile('Er,.ythromyci')
+        ctt0a = re.sub(randmess,'Erythromyci',ctt0a1)
 
         #turn multi-line double antibiotic name into one line entry
         randmess = re.compile(' */\s*')
@@ -228,8 +236,9 @@ for cfilelocs in allfileslocs:
                 }
                 megagigalist.append(new_df)
         else:
-            print('ERROR')
-            vle
+            print(f'Unrecognisable heading of the table skipping this data point, file {fnl}')
+            break
+            # raise Exception('Unrecognisable heading of the table')
 
 print(f'This script processed {n_files_processed} isolates (test result cards)')
 
