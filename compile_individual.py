@@ -5,7 +5,7 @@ import uuid
 import amr_utils
 
 #read in ast data parsed from various providers.
-preprocessed_files = ['ast_data_chevron.csv','ast_data_birdem.csv','ast_data_adhumic.csv','ast_data_square.csv','ast_data_imperial.csv','ast_data_khulna-mc.csv']
+preprocessed_files = ['ast_data_chevron.csv', 'ast_data_epic.csv', 'ast_data_birdem.csv','ast_data_adhumic.csv','ast_data_square.csv','ast_data_imperial.csv','ast_data_khulna-mc.csv']
 indata_dir = 'outdata'
 
 if os.getenv('AMR_TEST') == 'test':

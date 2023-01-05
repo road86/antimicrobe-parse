@@ -1,6 +1,8 @@
 set -e
 echo 'python parse_chevron.py'
 python parse_chevron.py
+echo 'python parse_epic.py'
+python parse_epic.py
 echo 'python parse_square.py'
 python parse_square.py
 echo 'python parse_imperial.py'
